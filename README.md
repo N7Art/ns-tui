@@ -41,14 +41,14 @@ A beautiful terminal interface for searching NixOS packages in real-time.
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/ns-tui.git
+git clone https://github.com/briheet/ns-tui.git
 cd ns-tui
 
 # Build with Go
 go build -o bin/ns-tui ./cmd/ns-tui
 
 # Or use Task (recommended)
-task build
+task build && task run
 ```
 
 ### With Nix
