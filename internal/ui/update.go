@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	"ns-tui/internal/models"
+	"github.com/briheet/ns-tui/internal/models"
 
 	"github.com/atotto/clipboard"
 	"github.com/charmbracelet/bubbles/spinner"

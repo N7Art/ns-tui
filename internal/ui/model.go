@@ -3,8 +3,8 @@ package ui
 import (
 	"time"
 
-	"ns-tui/internal/api"
-	"ns-tui/internal/models"
+	"github.com/briheet/ns-tui/internal/api"
+	"github.com/briheet/ns-tui/internal/models"
 
 	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/textinput"

@@ -9,7 +9,7 @@ import (
 	"net/http"
 	"time"
 
-	"ns-tui/internal/models"
+	"github.com/briheet/ns-tui/internal/models"
 )
 
 const (

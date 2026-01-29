@@ -5,8 +5,8 @@ import (
 	"runtime"
 	"strings"
 
-	"ns-tui/internal/models"
-	"ns-tui/internal/styles"
+	"github.com/briheet/ns-tui/internal/models"
+	"github.com/briheet/ns-tui/internal/styles"
 
 	"github.com/charmbracelet/lipgloss"
 )

@@ -1,6 +1,6 @@
 package ui
 
-import "ns-tui/internal/models"
+import "github.com/briheet/ns-tui/internal/models"
 
 // searchResultMsg is sent when search results are received
 type searchResultMsg struct {

@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"ns-tui/internal/ui"
+	"github.com/briheet/ns-tui/internal/ui"
 
 	tea "github.com/charmbracelet/bubbletea"
 )
