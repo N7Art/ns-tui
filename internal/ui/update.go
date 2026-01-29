@@ -146,14 +146,14 @@ func (m Model) copyInstallCommand() tea.Cmd {
 
 	var command string
 	switch m.selectedInstallMethod {
-	case 0: // nix-env
-		command = fmt.Sprintf("nix-env -iA nixpkgs.%s", m.selectedPackage.AttrName)
-	case 1: // nix profile
-		command = fmt.Sprintf("nix profile install nixpkgs#%s", m.selectedPackage.AttrName)
-	case 2: // NixOS Configuration
-		command = fmt.Sprintf("environment.systemPackages = [ pkgs.%s ];", m.selectedPackage.AttrName)
-	case 3: // nix-shell
+	case 0: // nix-shell
 		command = fmt.Sprintf("nix-shell -p %s", m.selectedPackage.AttrName)
+	case 1: // NixOS Config
+		command = fmt.Sprintf("environment.systemPackages = [ pkgs.%s ];", m.selectedPackage.AttrName)
+	case 2: // nix-env
+		command = fmt.Sprintf("nix-env -iA nixpkgs.%s", m.selectedPackage.AttrName)
+	case 3: // nix profile
+		command = fmt.Sprintf("nix profile install nixpkgs#%s", m.selectedPackage.AttrName)
 	}
 
 	return func() tea.Msg {
