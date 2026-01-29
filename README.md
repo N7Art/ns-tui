@@ -26,9 +26,7 @@
 
 <div align="center">
 
-![ns-tui nixpkgs](assets/ns-tui-nixpkgs.png)
-![ns-tui home](assets/ns-tui-home.png)
-![ns-tui home manager](assets/ns-tui-home-second.png)
+![ns-tui demo](assets/ns-tui-demo.gif)
 
 </div>
 
