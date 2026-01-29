@@ -316,25 +316,32 @@ func (m Model) renderDetailView() string {
 
 	pkg := m.selectedPackage
 
+	// Center style for top 4 items
+	// Use a width that matches the detail box better
+	centerStyle := lipgloss.NewStyle().Width(110).Align(lipgloss.Center)
+
 	// Title
 	title := styles.TitleStyle.Render(fmt.Sprintf("📦 %s", pkg.Name))
-	content.WriteString(title)
+	content.WriteString(centerStyle.Render(title))
 	content.WriteString("\n\n")
 
 	// Version
-	content.WriteString(styles.DetailLabelStyle.Render("Version: "))
-	content.WriteString(styles.DetailValueStyle.Render(pkg.Version))
+	versionLine := styles.DetailLabelStyle.Render("Version: ") + styles.DetailValueStyle.Render(pkg.Version)
+	content.WriteString(centerStyle.Render(versionLine))
 	content.WriteString("\n\n")
 
 	// Attribute Name
-	content.WriteString(styles.DetailLabelStyle.Render("Attribute: "))
-	content.WriteString(styles.DetailValueStyle.Render(pkg.AttrName))
+	attrLine := styles.DetailLabelStyle.Render("Attribute: ") + styles.DetailValueStyle.Render(pkg.AttrName)
+	content.WriteString(centerStyle.Render(attrLine))
 	content.WriteString("\n\n")
 
 	// Description
 	if pkg.Description != "" {
-		content.WriteString(styles.DetailLabelStyle.Render("Description:\n"))
-		content.WriteString(styles.DetailValueStyle.Render(pkg.Description))
+		descLabel := styles.DetailLabelStyle.Render("Description:")
+		content.WriteString(centerStyle.Render(descLabel))
+		content.WriteString("\n")
+		descValue := styles.DetailValueStyle.Render(pkg.Description)
+		content.WriteString(centerStyle.Render(descValue))
 		content.WriteString("\n\n")
 	}
 
