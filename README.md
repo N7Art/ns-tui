@@ -23,8 +23,6 @@ A beautiful terminal interface for searching NixOS packages in real-time.
 
 ---
 
-## Screenshot
-
 <div align="center">
 
 ![ns-tui screenshot](assets/image.png)
