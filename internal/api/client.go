@@ -77,6 +77,34 @@ func (c *Client) SearchPackages(query string) ([]models.Package, error) {
 						},
 					},
 				},
+				"should": []any{
+					// Boost exact matches significantly
+					map[string]any{
+						"term": map[string]any{
+							"package_attr_name": map[string]any{
+								"value": query,
+								"boost": 100,
+							},
+						},
+					},
+					map[string]any{
+						"term": map[string]any{
+							"package_pname": map[string]any{
+								"value": query,
+								"boost": 80,
+							},
+						},
+					},
+					// Boost prefix matches
+					map[string]any{
+						"prefix": map[string]any{
+							"package_attr_name": map[string]any{
+								"value": query,
+								"boost": 50,
+							},
+						},
+					},
+				},
 				"filter": []any{
 					map[string]any{
 						"term": map[string]any{
