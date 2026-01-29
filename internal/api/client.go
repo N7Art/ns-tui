@@ -61,8 +61,8 @@ func (c *Client) SearchPackages(query string) ([]models.Package, error) {
 											"package_programs^9",
 											"package_programs.*^5.3",
 										},
-										"type":     "cross_fields",
-										"operator": "and",
+										"type":      "best_fields",
+										"fuzziness": "AUTO",
 									},
 								},
 								map[string]any{
