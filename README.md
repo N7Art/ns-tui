@@ -25,15 +25,27 @@ A beautiful terminal interface for searching NixOS packages in real-time.
 
 ## Features
 
-- 🔍 **Real-time search** with instant results as you type
+- 🔍 **Fuzzy search** - finds packages even with typos (lezygit → lazygit)
 - ⚡ **Powered by official NixOS backend** - same data as search.nixos.org
 - ⌨️ **Vim-style keybindings** - modal interface with Insert/Normal modes
 - 🎨 **Beautiful Catppuccin theme** - easy on the eyes
 - 📦 **Rich package details** - version, description, programs, platform support
 - 📋 **One-click install commands** - copy any of 4 installation methods
-- 🚀 **Fast & responsive** - debounced search, intelligent scrolling
+- 🚀 **Fast & responsive** - debounced search, animated spinner, intelligent scrolling
+- 💬 **Visual feedback** - toast notifications on copy, package count indicators
+- ❓ **Built-in help** - press `?` for complete keybindings reference
 
 ## Installation
+
+### Via Go Install (Recommended)
+
+**Prerequisites:** Go 1.25+
+
+```bash
+go install github.com/briheet/ns-tui/cmd/ns-tui@latest
+```
+
+This installs the binary to `$GOPATH/bin/ns-tui` (usually `~/go/bin/ns-tui`). Make sure `$GOPATH/bin` is in your `$PATH`.
 
 ### From Source
 
@@ -67,11 +79,12 @@ nix run
 
 ### Quick Start Guide
 
-1. **Type to search** - Start in Insert mode, results appear as you type
+1. **Type to search** - Start in Insert mode, results appear as you type (fuzzy matching enabled!)
 2. **Navigate** - `Esc` → Normal mode, then `j`/`k` to move through results
-3. **View package** - Press `Enter` to see full details
-4. **Copy install command** - Use `Tab` to select method, `Enter` to copy
-5. **Exit** - Press `q` to quit anytime
+3. **View package** - Press `Enter` to see full details with 4 install methods
+4. **Copy install command** - Use `j`/`k` or `Tab` to select method, `Space`/`Enter` to copy
+5. **Get help** - Press `?` anytime to see all keybindings
+6. **Exit** - Press `q` to quit anytime
 
 ### Keybindings
 
@@ -81,9 +94,11 @@ nix run
 
 | Key | Action |
 |-----|--------|
-| Type | Search packages |
+| Type | Search packages (fuzzy) |
 | `↑` `↓` | Navigate results |
+| `Enter` | → Normal mode |
 | `Esc` | → Normal mode |
+| `?` | Show help |
 | `q` | Quit |
 
 </td><td>
@@ -94,19 +109,24 @@ nix run
 | `j` `k` | Move down/up |
 | `g` `G` | Top/Bottom |
 | `Enter` | View details |
+| `?` | Show help |
 | `q` | Quit |
 
 </td><td>
 
 | Key | Action |
 |-----|--------|
-| `Tab` | Cycle install methods |
-| `Enter` | Copy command |
+| `j` `k` | Cycle methods (↓/↑) |
+| `Tab` `Shift+Tab` | Cycle methods (→/←) |
+| `Space` `Enter` | Copy command |
 | `Esc` `b` | ← Back |
+| `?` | Show help |
 | `q` | Quit |
 
 </td></tr>
 </table>
+
+**Global:** Press `?` anytime to see the complete keybindings reference overlay.
 
 ## How It Works
 
@@ -119,7 +139,11 @@ ns-tui queries the official NixOS Elasticsearch backend (same as [search.nixos.o
 
 **Architecture:**
 - Modal interface: Insert → Normal → Detail modes (vim-inspired)
+- Fuzzy search with Elasticsearch AUTO fuzziness
 - 300ms debounced search for optimal performance
+- Animated loading states with spinner component
+- Toast notifications for user feedback
+- Interactive help overlay with complete keybindings
 - Responsive layout adapts to terminal size
 - Catppuccin color scheme for comfort
 
