@@ -11,9 +11,9 @@
 <span style="color: #6c7086;">..::::..:::......:::::::::::::::..::::::.......:::.....::</span>
 </pre>
 
-A beautiful terminal interface for searching NixOS packages in real-time.
+### **The fastest way to discover & install NixOS packages**
 
-**[Features](#features) • [Installation](#installation) • [Usage](#usage) • [Development](#development)**
+*Search, explore, and copy install commands in seconds — all from your terminal*
 
 [![Built with Bubbletea](https://img.shields.io/badge/Built%20with-Bubbletea-5B8C5A?style=flat-square)](https://github.com/charmbracelet/bubbletea)
 [![Go 1.25+](https://img.shields.io/badge/Go-1.25+-00ADD8?style=flat-square&logo=go)](https://go.dev/)
@@ -25,182 +25,118 @@ A beautiful terminal interface for searching NixOS packages in real-time.
 
 <div align="center">
 
-![ns-tui screenshot](assets/image.png)
+![ns-tui in action](assets/landing_image.png)
+![ns-tui in action](assets/package_image.png)
 
 </div>
 
-## Features
+## ✨ Why ns-tui?
 
-- 🔍 **Fuzzy search** - finds packages even with typos (lezygit → lazygit)
-- ⚡ **Powered by official NixOS backend** - same data as search.nixos.org
-- ⌨️ **Vim-style keybindings** - modal interface with Insert/Normal modes
-- 🎨 **Beautiful Catppuccin theme** - easy on the eyes
-- 📦 **Rich package details** - version, description, programs, platform support
-- 📋 **One-click install commands** - copy any of 4 installation methods
-- 🚀 **Fast & responsive** - debounced search, animated spinner, intelligent scrolling
-- 💬 **Visual feedback** - toast notifications on copy, package count indicators
-- ❓ **Built-in help** - press `?` for complete keybindings reference
+Stop switching between browser tabs and terminal windows. **ns-tui** brings the entire NixOS package ecosystem to your fingertips with:
 
-## Installation
+- **⚡ Instant fuzzy search** — typos? No problem. "lezygit" finds "lazygit"
+- **🎯 Zero context switching** — search, explore, and install without leaving your terminal
+- **⌨️ Vim keybindings** — navigate like a pro with familiar j/k motions
+- **📋 One-click copying** — choose from 4 install methods, hit Enter, done
+- **🎨 Beautiful UI** — Catppuccin theme that's easy on the eyes
+- **💨 Blazing fast** — real-time results powered by official NixOS search
 
-### Via Go Install (Recommended)
+## 🚀 Quick Start
 
-**Prerequisites:** Go 1.25+
+```bash
+# Install with Go
+go install github.com/briheet/ns-tui/cmd/ns-tui@latest
+
+# Or run with Nix (no install needed)
+nix run github:briheet/ns-tui
+```
+
+Then just run:
+```bash
+ns-tui
+```
+
+**That's it.** Start typing to search, press `?` for help.
+
+## 💡 How to use
+
+1. **Type** to search packages (fuzzy matching enabled)
+2. **Navigate** with `j`/`k` or arrow keys
+3. **Press Enter** to view package details
+4. **Tab** through install methods
+5. **Space/Enter** to copy the command
+
+**Pro tip:** Press `?` anytime for the complete keybindings guide.
+
+## 🎯 Perfect for
+
+- **NixOS beginners** who want to discover packages easily
+- **Power users** who prefer terminal workflows
+- **Anyone tired** of slow browser-based package search
+- **Developers** who value speed and efficiency
+
+## 🛠️ Installation Methods
+
+<details>
+<summary><b>Via Go Install</b> (recommended)</summary>
 
 ```bash
 go install github.com/briheet/ns-tui/cmd/ns-tui@latest
 ```
 
-This installs the binary to `$GOPATH/bin/ns-tui` (usually `~/go/bin/ns-tui`). Make sure `$GOPATH/bin` is in your `$PATH`.
+Make sure `$GOPATH/bin` is in your `$PATH`.
+</details>
 
-### From Source
-
-**Prerequisites:** Go 1.25+
+<details>
+<summary><b>With Nix Flakes</b></summary>
 
 ```bash
-# Clone the repository
+# Run directly
+nix run github:briheet/ns-tui
+
+# Or build locally
+nix build
+```
+</details>
+
+<details>
+<summary><b>From Source</b></summary>
+
+```bash
 git clone https://github.com/briheet/ns-tui.git
 cd ns-tui
-
-# Build with Go
 go build -o bin/ns-tui ./cmd/ns-tui
-
-# Or use Task (recommended)
-task build && task run
 ```
+</details>
 
-### With Nix
+## 🎨 Features at a Glance
 
-```bash
-nix build
-# or run directly without installing
-nix run
-```
+| Feature | Description |
+|---------|-------------|
+| 🔍 **Fuzzy Search** | Smart search that handles typos and partial matches |
+| 📦 **Rich Details** | See version, description, programs, and platform support |
+| ⌨️ **Vim Bindings** | Modal interface (Insert/Normal/Detail modes) |
+| 💬 **Live Feedback** | Toast notifications, loading spinners, package counters |
+| 🎯 **4 Install Methods** | nix-shell, NixOS config, nix-env, nix profile |
+| 🌐 **Official Data** | Powered by search.nixos.org backend |
+| 📱 **Responsive** | Adapts to your terminal size |
 
-## Usage
+## ⭐ Love ns-tui?
 
-```bash
-./bin/ns-tui
-```
+- **Star this repo** to show your support
+- **Share with friends** who use NixOS
+- **Contribute** — PRs welcome!
 
-### Quick Start Guide
+## 📄 License
 
-1. **Type to search** - Start in Insert mode, results appear as you type (fuzzy matching enabled!)
-2. **Navigate** - `Esc` → Normal mode, then `j`/`k` to move through results
-3. **View package** - Press `Enter` to see full details with 4 install methods
-4. **Copy install command** - Use `j`/`k` or `Tab` to select method, `Space`/`Enter` to copy
-5. **Get help** - Press `?` anytime to see all keybindings
-6. **Exit** - Press `q` to quit anytime
-
-### Keybindings
-
-<table>
-<tr><th>Insert Mode</th><th>Normal Mode</th><th>Detail View</th></tr>
-<tr><td>
-
-| Key | Action |
-|-----|--------|
-| Type | Search packages (fuzzy) |
-| `↑` `↓` | Navigate results |
-| `Enter` | → Normal mode |
-| `Esc` | → Normal mode |
-| `?` | Show help |
-| `q` | Quit |
-
-</td><td>
-
-| Key | Action |
-|-----|--------|
-| `i` | → Insert mode |
-| `j` `k` | Move down/up |
-| `g` `G` | Top/Bottom |
-| `Enter` | View details |
-| `?` | Show help |
-| `q` | Quit |
-
-</td><td>
-
-| Key | Action |
-|-----|--------|
-| `j` `k` | Cycle methods (↓/↑) |
-| `Tab` `Shift+Tab` | Cycle methods (→/←) |
-| `Space` `Enter` | Copy command |
-| `Esc` `b` | ← Back |
-| `?` | Show help |
-| `q` | Quit |
-
-</td></tr>
-</table>
-
-**Global:** Press `?` anytime to see the complete keybindings reference overlay.
-
-## How It Works
-
-ns-tui queries the official NixOS Elasticsearch backend (same as [search.nixos.org](https://search.nixos.org)) to provide real-time package search with relevance-based sorting.
-
-**Built with:**
-- [Bubbletea](https://github.com/charmbracelet/bubbletea) - TUI framework using The Elm Architecture
-- [Lipgloss](https://github.com/charmbracelet/lipgloss) - Terminal styling
-- [Bubbles](https://github.com/charmbracelet/bubbles) - TUI components
-
-**Architecture:**
-- Modal interface: Insert → Normal → Detail modes (vim-inspired)
-- Fuzzy search with Elasticsearch AUTO fuzziness
-- 300ms debounced search for optimal performance
-- Animated loading states with spinner component
-- Toast notifications for user feedback
-- Interactive help overlay with complete keybindings
-- Responsive layout adapts to terminal size
-- Catppuccin color scheme for comfort
-
-## Development
-
-### Project Structure
-
-```
-cmd/ns-tui/    # Application entry point
-internal/
-  ├── api/     # NixOS search backend client
-  ├── models/  # Data structures (Package, Mode)
-  ├── styles/  # Lipgloss theme & styles
-  └── ui/      # Bubbletea components (Model, Update, View)
-```
-
-### Tasks
-
-```bash
-task build    # Build binary
-task run      # Build and run
-task fmt      # Format code
-task lint     # Run linter
-task clean    # Clean artifacts
-```
-
-### Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-**Code quality:** Run `task fmt` and `task lint` before committing.
-
-## License
-
-MIT License - see [LICENSE](LICENSE) file for details.
-
-## Acknowledgments
-
-Built with ❤️ using:
-- [Charmbracelet](https://github.com/charmbracelet) TUI libraries
-- [NixOS](https://nixos.org) package search API
-- [Catppuccin](https://github.com/catppuccin/catppuccin) color palette
+MIT License - see [LICENSE](LICENSE) for details.
 
 ---
 
 <div align="center">
 
-**Star ⭐ this repo if you find it useful!**
+**Made with ❤️ for the NixOS community**
+
+[Report Bug](https://github.com/briheet/ns-tui/issues) · [Request Feature](https://github.com/briheet/ns-tui/issues)
 
 </div>

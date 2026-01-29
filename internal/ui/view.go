@@ -316,9 +316,14 @@ func (m Model) renderDetailView() string {
 
 	pkg := m.selectedPackage
 
-	// Center style for top 4 items
-	// Use a width that matches the detail box better
-	centerStyle := lipgloss.NewStyle().Width(110).Align(lipgloss.Center)
+	// Calculate responsive box width (90% of screen, max 160)
+	boxWidth := int(float64(m.width) * 0.9)
+	if boxWidth > 160 {
+		boxWidth = 160
+	}
+
+	// Center style for top 4 items (account for padding: 2 left + 2 right = 4)
+	centerStyle := lipgloss.NewStyle().Width(boxWidth - 4).Align(lipgloss.Center)
 
 	// Title
 	title := styles.TitleStyle.Render(fmt.Sprintf("📦 %s", pkg.Name))
@@ -345,11 +350,13 @@ func (m Model) renderDetailView() string {
 		content.WriteString("\n\n")
 	}
 
-	// Long Description (no truncation)
+	// Long Description (wrapped to box width)
 	if pkg.LongDescription != "" {
 		longDesc := stripHTML(pkg.LongDescription)
 		content.WriteString(styles.DetailLabelStyle.Render("Long Description:\n"))
-		content.WriteString(styles.DetailValueStyle.Render(longDesc))
+		// Wrap text to fit within box (account for padding and margins)
+		wrappedDesc := wrapText(longDesc, boxWidth-8)
+		content.WriteString(styles.DetailValueStyle.Render(wrappedDesc))
 		content.WriteString("\n\n")
 	}
 
@@ -374,10 +381,13 @@ func (m Model) renderDetailView() string {
 		content.WriteString("\n\n")
 	}
 
-	// Programs (show all)
+	// Programs (show all with wrapping)
 	if len(pkg.Programs) > 0 {
 		content.WriteString(styles.DetailLabelStyle.Render("Programs: "))
-		content.WriteString(styles.DetailValueStyle.Render(formatStringArray(pkg.Programs)))
+		programsList := formatStringArray(pkg.Programs)
+		// Wrap programs list to fit within box
+		wrappedPrograms := wrapText(programsList, boxWidth-8)
+		content.WriteString(styles.DetailValueStyle.Render(wrappedPrograms))
 		content.WriteString("\n\n")
 	}
 
@@ -410,7 +420,8 @@ func (m Model) renderDetailView() string {
 	}
 
 	// Build left menu - pad all items to same width for consistency
-	leftWidth := 28
+	leftWidth := 20  // Reduced for better balance
+	rightWidth := 65 // Adjusted for better balance
 
 	// Styles for menu items
 	indicatorStyle := lipgloss.NewStyle().Foreground(styles.ColorGreen).Bold(true)
@@ -452,7 +463,6 @@ func (m Model) renderDetailView() string {
 	leftBox := leftBoxStyle.Render(leftContent)
 
 	// Right box content - styled command
-	rightWidth := 75
 	selectedCmd := commands[m.selectedInstallMethod]
 
 	// Style the command with green color and center it
@@ -471,9 +481,9 @@ func (m Model) renderDetailView() string {
 		styledCmd = cmdStyle.Render(selectedCmd)
 	}
 
-	// Style help text - smaller and dimmer
-	helpStyle := lipgloss.NewStyle().Foreground(styles.ColorGray).Faint(true)
-	helpText := "Press Enter to copy"
+	// Style help text - bold and visible
+	helpStyle := lipgloss.NewStyle().Foreground(styles.ColorTeal).Bold(true)
+	helpText := "Press Enter or Spacebar to copy"
 	styledHelp := helpStyle.Render(helpText)
 
 	helpVisibleLen := len(helpText)
@@ -500,8 +510,14 @@ func (m Model) renderDetailView() string {
 	spacer := "  "
 	installLayout := lipgloss.JoinHorizontal(lipgloss.Top, leftBox, spacer, rightBox)
 
-	// Add margin
-	content.WriteString("\n  " + strings.ReplaceAll(installLayout, "\n", "\n  "))
+	// Center the installation layout
+	centeredInstallLayout := lipgloss.NewStyle().
+		Width(boxWidth - 4).  // Account for box padding
+		Align(lipgloss.Center).
+		Render(installLayout)
+
+	content.WriteString("\n")
+	content.WriteString(centeredInstallLayout)
 	content.WriteString("\n\n")
 
 	// Toast notification
@@ -521,8 +537,14 @@ func (m Model) renderDetailView() string {
 	help := styles.HelpStyle.Render("j/k or tab: cycle methods • enter/space: copy command • esc/b: back • ?: help • q: quit")
 	content.WriteString(help)
 
-	// Wrap in a box
-	box := styles.DetailBoxStyle.Render(content.String())
+	// Wrap in a box with dynamic width
+	boxStyle := lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(styles.ColorPinkLight).
+		Padding(3, 2).
+		Width(boxWidth)
+
+	box := boxStyle.Render(content.String())
 
 	// Center everything
 	doc := lipgloss.NewStyle().

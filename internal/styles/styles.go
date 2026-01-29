@@ -107,11 +107,11 @@ var (
 
 // Detail view styles
 var (
+	// Note: DetailBoxStyle width is now set dynamically in renderDetailView
 	DetailBoxStyle = lipgloss.NewStyle().
 			Border(lipgloss.RoundedBorder()).
 			BorderForeground(ColorPinkLight).
-			Padding(1, 2).
-			Width(120)
+			Padding(1, 2)
 
 	DetailLabelStyle = lipgloss.NewStyle().
 				Bold(true).
