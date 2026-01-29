@@ -23,11 +23,6 @@ func (m Model) View() string {
 		return m.renderHMPromptOverlay()
 	}
 
-	// Show tab message overlay
-	if m.showTabMessage {
-		return m.renderTabMessageOverlay()
-	}
-
 	// Show detailed HM option view
 	if m.mode == models.DetailMode && m.selectedHMOption != nil {
 		return m.renderHMDetailView()
@@ -83,6 +78,8 @@ func (m Model) renderSearchView() string {
 		subtitleText = "Real-time package discovery with fuzzy search"
 	case 1:
 		subtitleText = "Search Home Manager configuration options"
+	case 2:
+		subtitleText = "Search Pacman packages"
 	default:
 		subtitleText = "Real-time package discovery with fuzzy search"
 	}
@@ -155,9 +152,12 @@ func (m Model) renderSearchView() string {
 	// RESULTS SECTION — pass remaining height so results don't overflow
 	remainingLines := m.height - headerLines - footerHeight - 1
 	var resultsContent string
-	if m.selectedTab == 1 {
+	switch m.selectedTab {
+	case 1:
 		resultsContent = m.renderHMResults(remainingLines)
-	} else {
+	case 2:
+		resultsContent = m.renderPacmanPlaceholder()
+	default:
 		resultsContent = m.renderResults(remainingLines)
 	}
 
@@ -1216,53 +1216,23 @@ func (m Model) renderHelpOverlay() string {
 		Render(helpBox)
 }
 
-// renderTabMessageOverlay renders the "under development" message for non-Nixpkgs tabs
-func (m Model) renderTabMessageOverlay() string {
-	tabNames := []string{"Nixpkgs", "Home Manager", "Pacman"}
-	selectedTabName := tabNames[m.selectedTab]
+// renderPacmanPlaceholder renders an inline "under development" message for the Pacman tab
+func (m Model) renderPacmanPlaceholder() string {
+	var content strings.Builder
 
 	title := lipgloss.NewStyle().
 		Foreground(styles.ColorYellow).
 		Bold(true).
-		Align(lipgloss.Center).
-		Render("⚠  UNDER DEVELOPMENT")
+		Render("Under Development")
+	content.WriteString(lipgloss.NewStyle().Align(lipgloss.Center).Width(m.width).Render(title))
+	content.WriteString("\n\n")
 
 	message := lipgloss.NewStyle().
-		Foreground(styles.ColorWhite).
-		Align(lipgloss.Center).
-		Width(50).
-		Render(fmt.Sprintf("The %s package source is currently under development and not yet available.", selectedTabName))
-
-	info := lipgloss.NewStyle().
 		Foreground(styles.ColorGray).
 		Italic(true).
-		Align(lipgloss.Center).
-		Render("This feature will be implemented in a future release.")
+		Render("Pacman package search will be available in a future release.")
+	content.WriteString(lipgloss.NewStyle().Align(lipgloss.Center).Width(m.width).Render(message))
+	content.WriteString("\n")
 
-	footer := lipgloss.NewStyle().
-		Foreground(styles.ColorGray).
-		Italic(true).
-		Align(lipgloss.Center).
-		Render("\nPress Enter or Esc to continue")
-
-	var content strings.Builder
-	content.WriteString(title + "\n\n")
-	content.WriteString(message + "\n\n")
-	content.WriteString(info)
-	content.WriteString(footer)
-
-	// Create box
-	messageBox := lipgloss.NewStyle().
-		Border(lipgloss.RoundedBorder()).
-		BorderForeground(styles.ColorYellow).
-		Padding(2, 4).
-		Width(60).
-		Render(content.String())
-
-	// Center on screen
-	return lipgloss.NewStyle().
-		Width(m.width).
-		Height(m.height).
-		Align(lipgloss.Center, lipgloss.Center).
-		Render(messageBox)
+	return content.String()
 }

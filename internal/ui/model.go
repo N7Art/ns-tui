@@ -41,8 +41,7 @@ type Model struct {
 	toastMessage          string
 	toastVisible          bool
 	showHelp              bool
-	selectedTab           int  // 0=Nixpkgs, 1=Home Manager, 2=Pacman
-	showTabMessage        bool // Show "under development" message
+	selectedTab int // 0=Nixpkgs, 1=Home Manager, 2=Pacman
 	// Home Manager state
 	hmOptions         []models.HMOption // All loaded HM options
 	hmSearchResults   []models.HMOption // Current HM search results
@@ -86,7 +85,6 @@ func NewModel() Model {
 		toastVisible:   false,
 		showHelp:       false,
 		selectedTab:    0,
-		showTabMessage: false,
 	}
 }
 

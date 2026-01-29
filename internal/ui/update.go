@@ -31,12 +31,6 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 			return m, nil
 		}
 
-		// Close tab message with esc or enter
-		if m.showTabMessage && (msg.String() == "esc" || msg.String() == "enter") {
-			m.showTabMessage = false
-			return m, nil
-		}
-
 		// Handle HM fetch prompt
 		if m.showHMPrompt {
 			switch msg.String() {
@@ -66,7 +60,7 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		}
 
 		// Don't process other keys when help or tab message is shown
-		if m.showHelp || m.showTabMessage {
+		if m.showHelp {
 			return m, nil
 		}
 
@@ -342,7 +336,7 @@ func (m *Model) handleTabSwitch() tea.Cmd {
 		return checkHMCache()
 	default:
 		// Pacman — still under development
-		m.showTabMessage = true
+		m.textInput.Placeholder = "Search Pacman packages..."
 		return nil
 	}
 }
