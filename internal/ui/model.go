@@ -7,6 +7,8 @@ import (
 	"github.com/briheet/ns-tui/internal/hm"
 	"github.com/briheet/ns-tui/internal/models"
 
+	"github.com/briheet/ns-tui/internal/styles"
+
 	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
@@ -73,7 +75,7 @@ func NewModel() Model {
 	// Initialize spinner
 	s := spinner.New()
 	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
+	s.Style = lipgloss.NewStyle().Foreground(styles.ColorPink)
 
 	return Model{
 		textInput:    ti,

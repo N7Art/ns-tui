@@ -90,7 +90,7 @@ func (m Model) renderSearchView() string {
 	// Tabs
 	activeTabStyle := lipgloss.NewStyle().
 		Foreground(styles.ColorPurple).
-		Background(lipgloss.Color("235")).
+		Background(styles.ColorBgHighlight).
 		Bold(true).
 		Padding(0, 2)
 
@@ -168,7 +168,7 @@ func (m Model) renderSearchView() string {
 	if m.toastVisible {
 		toastStyle := lipgloss.NewStyle().
 			Foreground(styles.ColorGreen).
-			Background(lipgloss.Color("236")).
+			Background(styles.ColorDarkGray).
 			Padding(0, 2).
 			Bold(true)
 		toast := toastStyle.Render(m.toastMessage)
@@ -499,11 +499,11 @@ func (m Model) renderHMPromptOverlay() string {
 	noStyle := lipgloss.NewStyle().Padding(0, 3)
 
 	if m.hmPromptSelection == 0 {
-		yesStyle = yesStyle.Background(styles.ColorGreen).Foreground(lipgloss.Color("0")).Bold(true)
+		yesStyle = yesStyle.Background(styles.ColorGreen).Foreground(styles.ColorBg).Bold(true)
 		noStyle = noStyle.Foreground(styles.ColorGray)
 	} else {
 		yesStyle = yesStyle.Foreground(styles.ColorGray)
-		noStyle = noStyle.Background(styles.ColorRed).Foreground(lipgloss.Color("0")).Bold(true)
+		noStyle = noStyle.Background(styles.ColorRed).Foreground(styles.ColorBg).Bold(true)
 	}
 
 	buttons := lipgloss.JoinHorizontal(lipgloss.Top,

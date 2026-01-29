@@ -1,6 +1,11 @@
 package styles
 
-import "github.com/charmbracelet/lipgloss"
+import (
+	"strings"
+
+	catppuccin "github.com/catppuccin/go"
+	"github.com/charmbracelet/lipgloss"
+)
 
 // Color palette - Catppuccin inspired
 var (
@@ -124,3 +129,122 @@ var (
 // Separator style
 var SeparatorStyle = lipgloss.NewStyle().
 	Foreground(ColorDarkGray)
+
+// SetTheme reassigns all color and style variables from a Catppuccin flavor.
+// Valid names: mocha, latte, frappe, macchiato. Defaults to mocha.
+func SetTheme(name string) {
+	name = strings.ToLower(name)
+	var flavor catppuccin.Flavor
+	switch name {
+	case "latte":
+		flavor = catppuccin.Latte
+	case "frappe":
+		flavor = catppuccin.Frappe
+	case "macchiato":
+		flavor = catppuccin.Macchiato
+	default:
+		flavor = catppuccin.Mocha
+	}
+
+	// Reassign color variables
+	ColorPink = lipgloss.Color(flavor.Rosewater().Hex)
+	ColorBlue = lipgloss.Color(flavor.Blue().Hex)
+	ColorPurple = lipgloss.Color(flavor.Mauve().Hex)
+	ColorPinkLight = lipgloss.Color(flavor.Pink().Hex)
+	ColorCyan = lipgloss.Color(flavor.Sky().Hex)
+	ColorYellow = lipgloss.Color(flavor.Yellow().Hex)
+	ColorWhite = lipgloss.Color(flavor.Text().Hex)
+	ColorGreen = lipgloss.Color(flavor.Green().Hex)
+	ColorRed = lipgloss.Color(flavor.Red().Hex)
+	ColorTeal = lipgloss.Color(flavor.Teal().Hex)
+	ColorGray = lipgloss.Color(flavor.Overlay0().Hex)
+	ColorDarkGray = lipgloss.Color(flavor.Surface1().Hex)
+	ColorBg = lipgloss.Color(flavor.Base().Hex)
+	ColorBgHighlight = lipgloss.Color(flavor.Surface0().Hex)
+
+	// Rebuild all styles using updated colors
+	TitleStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(ColorPink).
+		Background(ColorBg).
+		Padding(0, 2).
+		Align(lipgloss.Center)
+
+	SubtitleStyle = lipgloss.NewStyle().
+		Foreground(ColorBlue).
+		Italic(true).
+		Align(lipgloss.Center).
+		MarginBottom(1)
+
+	SearchBoxStyle = lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(ColorPinkLight).
+		Padding(0, 1).
+		Width(70)
+
+	InsertModeStyle = lipgloss.NewStyle().
+		Bold(true).
+		Background(ColorGreen).
+		Foreground(ColorBg).
+		Padding(0, 1)
+
+	NormalModeStyle = lipgloss.NewStyle().
+		Bold(true).
+		Background(ColorBlue).
+		Foreground(ColorBg).
+		Padding(0, 1)
+
+	ResultItemStyle = lipgloss.NewStyle().
+		Padding(0, 1).
+		MarginTop(1)
+
+	SelectedItemStyle = lipgloss.NewStyle().
+		Background(ColorBgHighlight).
+		Foreground(ColorPurple).
+		Padding(0, 1).
+		MarginTop(1).
+		Bold(true)
+
+	PackageNameStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(ColorCyan)
+
+	VersionStyle = lipgloss.NewStyle().
+		Foreground(ColorYellow)
+
+	DescriptionStyle = lipgloss.NewStyle().
+		Foreground(ColorWhite)
+
+	LoadingStyle = lipgloss.NewStyle().
+		Foreground(ColorGreen).
+		Bold(true).
+		Align(lipgloss.Center)
+
+	ErrorStyle = lipgloss.NewStyle().
+		Foreground(ColorRed).
+		Bold(true)
+
+	CountStyle = lipgloss.NewStyle().
+		Foreground(ColorTeal).
+		Bold(true)
+
+	HelpStyle = lipgloss.NewStyle().
+		Foreground(ColorGray).
+		Align(lipgloss.Center).
+		MarginTop(1)
+
+	DetailBoxStyle = lipgloss.NewStyle().
+		Border(lipgloss.RoundedBorder()).
+		BorderForeground(ColorPinkLight).
+		Padding(1, 2)
+
+	DetailLabelStyle = lipgloss.NewStyle().
+		Bold(true).
+		Foreground(ColorPinkLight)
+
+	DetailValueStyle = lipgloss.NewStyle().
+		Foreground(ColorWhite)
+
+	SeparatorStyle = lipgloss.NewStyle().
+		Foreground(ColorDarkGray)
+}
