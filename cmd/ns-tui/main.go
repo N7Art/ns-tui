@@ -11,8 +11,6 @@ import (
 	tea "github.com/charmbracelet/bubbletea"
 )
 
-var version = "dev"
-
 func main() {
 	theme := flag.String("theme", "", "catppuccin theme (mocha, latte, frappe, macchiato)")
 	flag.Parse()
@@ -21,8 +19,8 @@ func main() {
 		styles.SetTheme(*theme)
 	}
 
-	m := ui.NewModel()
-	p := tea.NewProgram(m, tea.WithAltScreen())
+	baseModel := ui.NewModel()
+	p := tea.NewProgram(baseModel, tea.WithAltScreen())
 
 	if _, err := p.Run(); err != nil {
 		fmt.Printf("Error: %v\n", err)
