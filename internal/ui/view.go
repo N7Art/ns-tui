@@ -148,9 +148,9 @@ func (m Model) renderSearchView() string {
 	// Help bar
 	var helpText string
 	if m.mode == models.InsertMode {
-		helpText = "esc: normal mode • ↑/↓: navigate • tab: switch source • ?: help • q/ctrl+c: quit"
+		helpText = "esc: normal mode • ↑/↓: navigate • tab: switch source • ?: help • q: quit"
 	} else {
-		helpText = "i: insert mode • j/k: navigate • enter: details • g/G: top/bottom • tab: switch source • ?: help • q: quit"
+		helpText = "i: insert mode • j/k: navigate • enter/space: details • g/G: top/bottom • tab: switch source • ?: help • q: quit"
 	}
 	help := styles.HelpStyle.Render(helpText)
 	footer.WriteString(lipgloss.NewStyle().Align(lipgloss.Center).Width(m.width).Render(help))
@@ -484,6 +484,13 @@ func (m Model) renderDetailView() string {
 	// Style help text - bold and visible
 	helpStyle := lipgloss.NewStyle().Foreground(styles.ColorTeal).Bold(true)
 	helpText := "Press Enter or Spacebar to copy"
+
+	// Change text when copied successfully
+	if m.toastVisible {
+		helpStyle = lipgloss.NewStyle().Foreground(styles.ColorGreen).Bold(true)
+		helpText = "✓ Copied successfully"
+	}
+
 	styledHelp := helpStyle.Render(helpText)
 
 	helpVisibleLen := len(helpText)
@@ -519,19 +526,6 @@ func (m Model) renderDetailView() string {
 	content.WriteString("\n")
 	content.WriteString(centeredInstallLayout)
 	content.WriteString("\n\n")
-
-	// Toast notification
-	if m.toastVisible {
-		content.WriteString("\n")
-		toastStyle := lipgloss.NewStyle().
-			Foreground(styles.ColorGreen).
-			Background(lipgloss.Color("236")).
-			Padding(0, 2).
-			Bold(true)
-		toast := toastStyle.Render(m.toastMessage)
-		content.WriteString(toast)
-		content.WriteString("\n")
-	}
 
 	// Help
 	help := styles.HelpStyle.Render("j/k or tab: cycle methods • enter/space: copy command • esc/b: back • ?: help • q: quit")
@@ -709,7 +703,7 @@ func (m Model) renderHelpOverlay() string {
 		"i              → Switch to Insert mode",
 		"j / k          → Move down / up",
 		"g / G          → Jump to top / bottom",
-		"Enter          → View package details",
+		"Enter / Space  → View package details",
 		"q / Ctrl+C     → Quit application",
 	}
 

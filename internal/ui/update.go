@@ -72,7 +72,8 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.textInput.Blur()
 				return m, nil
 			}
-			return m, tea.Quit
+			// In normal mode, esc does nothing (use q to quit)
+			return m, nil
 		case "i":
 			if m.mode == models.NormalMode {
 				m.mode = models.InsertMode
@@ -104,12 +105,14 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				m.cursor = len(m.packages) - 1
 				return m, nil
 			}
-		case "enter":
+		case "enter", " ":
 			if m.mode == models.InsertMode {
-				// Switch from Insert to Normal mode
-				m.mode = models.NormalMode
-				m.textInput.Blur()
-				return m, nil
+				// Switch from Insert to Normal mode (only on Enter, not space)
+				if msg.String() == "enter" {
+					m.mode = models.NormalMode
+					m.textInput.Blur()
+					return m, nil
+				}
 			}
 			if m.mode == models.NormalMode && len(m.packages) > 0 {
 				m.mode = models.DetailMode
@@ -211,7 +214,7 @@ func (m Model) copyInstallCommand() tea.Cmd {
 	case 0: // nix-shell
 		command = fmt.Sprintf("nix-shell -p %s", m.selectedPackage.AttrName)
 	case 1: // NixOS Config
-		command = fmt.Sprintf("environment.systemPackages = [ pkgs.%s ];", m.selectedPackage.AttrName)
+		command = fmt.Sprintf("pkgs.%s", m.selectedPackage.AttrName)
 	case 2: // nix-env
 		command = fmt.Sprintf("nix-env -iA nixpkgs.%s", m.selectedPackage.AttrName)
 	case 3: // nix profile
