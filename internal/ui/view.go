@@ -275,22 +275,40 @@ func (m Model) renderDetailView() string {
 	}
 
 	// Build left menu - pad all items to same width for consistency
+	leftWidth := 28
+
+	// Styles for menu items
+	indicatorStyle := lipgloss.NewStyle().Foreground(styles.ColorGreen).Bold(true)
+	selectedMethodStyle := lipgloss.NewStyle().Foreground(styles.ColorPurple).Bold(true)
+	normalMethodStyle := lipgloss.NewStyle().Foreground(styles.ColorWhite)
+
 	var menuItems []string
 	for i, name := range methodNames {
-		indicator := "  "
+		var line string
 		if i == m.selectedInstallMethod {
-			indicator = "→ "
-		}
-		// Pad each line to exactly 18 chars
-		line := indicator + name
-		if len(line) < 18 {
-			line = line + strings.Repeat(" ", 18-len(line))
+			// Selected item: colored indicator + colored method name
+			indicator := indicatorStyle.Render("→ ")
+			methodName := selectedMethodStyle.Render(name)
+			line = indicator + methodName
+			// Calculate padding (accounting for ANSI codes)
+			visibleLen := 2 + len(name) // "→ " + name
+			if visibleLen < leftWidth {
+				line = line + strings.Repeat(" ", leftWidth-visibleLen)
+			}
+		} else {
+			// Normal item: spaces + normal method name
+			methodName := normalMethodStyle.Render(name)
+			line = "  " + methodName
+			visibleLen := 2 + len(name)
+			if visibleLen < leftWidth {
+				line = line + strings.Repeat(" ", leftWidth-visibleLen)
+			}
 		}
 		menuItems = append(menuItems, line)
 	}
 	leftContent := lipgloss.JoinVertical(lipgloss.Left, menuItems...)
 
-	// Left box - NO WIDTH, let content determine it
+	// Left box
 	leftBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.NormalBorder()).
 		BorderForeground(styles.ColorGray).
@@ -298,28 +316,44 @@ func (m Model) renderDetailView() string {
 
 	leftBox := leftBoxStyle.Render(leftContent)
 
-	// Right box content - pad to fixed width
+	// Right box content - styled command
+	rightWidth := 75
 	selectedCmd := commands[m.selectedInstallMethod]
-	// Pad command to 50 chars
-	if len(selectedCmd) < 50 {
-		selectedCmd = selectedCmd + strings.Repeat(" ", 50-len(selectedCmd))
-	} else if len(selectedCmd) > 50 {
-		selectedCmd = selectedCmd[:50]
+
+	// Style the command with green color and center it
+	cmdStyle := lipgloss.NewStyle().Foreground(styles.ColorGreen).Bold(true)
+	styledCmd := cmdStyle.Render(selectedCmd)
+
+	// Center the command
+	visibleCmdLen := len(selectedCmd)
+	if visibleCmdLen < rightWidth {
+		cmdLeftPad := (rightWidth - visibleCmdLen) / 2
+		cmdRightPad := rightWidth - visibleCmdLen - cmdLeftPad
+		styledCmd = strings.Repeat(" ", cmdLeftPad) + styledCmd + strings.Repeat(" ", cmdRightPad)
+	} else if visibleCmdLen > rightWidth {
+		// Truncate the original, then style
+		selectedCmd = selectedCmd[:rightWidth]
+		styledCmd = cmdStyle.Render(selectedCmd)
 	}
 
+	// Style help text - smaller and dimmer
+	helpStyle := lipgloss.NewStyle().Foreground(styles.ColorGray).Faint(true)
 	helpText := "Press Enter to copy"
-	if len(helpText) < 50 {
-		helpText = strings.Repeat(" ", (50-len(helpText))/2) + helpText + strings.Repeat(" ", (50-len(helpText)+1)/2)
-	}
+	styledHelp := helpStyle.Render(helpText)
+
+	helpVisibleLen := len(helpText)
+	leftPad := (rightWidth - helpVisibleLen) / 2
+	rightPad := rightWidth - helpVisibleLen - leftPad
+	paddedHelp := strings.Repeat(" ", leftPad) + styledHelp + strings.Repeat(" ", rightPad)
 
 	rightContent := lipgloss.JoinVertical(lipgloss.Left,
-		strings.Repeat(" ", 50),
-		selectedCmd,
-		strings.Repeat(" ", 50),
-		helpText,
+		strings.Repeat(" ", rightWidth),
+		styledCmd,
+		strings.Repeat(" ", rightWidth),
+		paddedHelp,
 	)
 
-	// Right box - NO WIDTH, let content determine it
+	// Right box
 	rightBoxStyle := lipgloss.NewStyle().
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(styles.ColorGreen).
