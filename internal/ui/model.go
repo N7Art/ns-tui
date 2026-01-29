@@ -41,7 +41,8 @@ type Model struct {
 	toastMessage          string
 	toastVisible          bool
 	showHelp              bool
-	selectedTab int // 0=Nixpkgs, 1=Home Manager, 2=Pacman
+	selectedTab int        // 0=Nixpkgs, 1=Home Manager, 2=Pacman
+	tabQueries  [3]string // Saved search text per tab
 	// Home Manager state
 	hmOptions         []models.HMOption // All loaded HM options
 	hmSearchResults   []models.HMOption // Current HM search results

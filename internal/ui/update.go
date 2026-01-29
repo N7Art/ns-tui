@@ -71,10 +71,12 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 		// Handle tab cycling in search view (not in detail mode)
 		if msg.String() == "tab" {
+			m.tabQueries[m.selectedTab] = m.textInput.Value()
 			m.selectedTab = (m.selectedTab + 1) % 3
 			return m, m.handleTabSwitch()
 		}
 		if msg.String() == "shift+tab" {
+			m.tabQueries[m.selectedTab] = m.textInput.Value()
 			m.selectedTab = (m.selectedTab - 1 + 3) % 3
 			return m, m.handleTabSwitch()
 		}
@@ -313,10 +315,18 @@ func (m Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 
 // handleTabSwitch handles logic when switching tabs
 func (m *Model) handleTabSwitch() tea.Cmd {
+	// Restore the target tab's saved query
+	m.textInput.SetValue(m.tabQueries[m.selectedTab])
+	m.lastQuery = m.tabQueries[m.selectedTab]
+
 	switch m.selectedTab {
 	case 0:
 		// Nixpkgs tab
 		m.textInput.Placeholder = "Search NixOS packages..."
+		if m.textInput.Value() != "" && len(m.packages) == 0 {
+			m.loading = true
+			return performSearch(m.apiClient, m.textInput.Value())
+		}
 		return nil
 	case 1:
 		// Home Manager tab
