@@ -41,8 +41,8 @@ type Model struct {
 	toastMessage          string
 	toastVisible          bool
 	showHelp              bool
-	selectedTab int        // 0=Nixpkgs, 1=Home Manager, 2=Pacman
-	tabQueries  [3]string // Saved search text per tab
+	selectedTab           int       // 0=Nixpkgs, 1=Home Manager, 2=Pacman
+	tabQueries            [3]string // Saved search text per tab
 	// Home Manager state
 	hmOptions         []models.HMOption // All loaded HM options
 	hmSearchResults   []models.HMOption // Current HM search results
@@ -58,8 +58,8 @@ type Model struct {
 	selectedHMOption      *models.HMOption  // Currently viewed HM option
 	hmDetailHistory       []hmDetailEntry   // Navigation stack for back-traversal
 	hmRelatedOptions      []models.HMOption // Sibling options for current selection
-	hmRelatedCursor       int              // Cursor in related options list
-	hmRelatedScrollOffset int              // Scroll offset for related options
+	hmRelatedCursor       int               // Cursor in related options list
+	hmRelatedScrollOffset int               // Scroll offset for related options
 }
 
 // NewModel creates a new application model
@@ -76,16 +76,16 @@ func NewModel() Model {
 	s.Style = lipgloss.NewStyle().Foreground(lipgloss.Color("205"))
 
 	return Model{
-		textInput:      ti,
-		packages:       []models.Package{},
-		cursor:         0,
-		loading:        false,
-		mode:           models.InsertMode,
-		apiClient:      api.NewClient(),
-		spinner:        s,
-		toastVisible:   false,
-		showHelp:       false,
-		selectedTab:    0,
+		textInput:    ti,
+		packages:     []models.Package{},
+		cursor:       0,
+		loading:      false,
+		mode:         models.InsertMode,
+		apiClient:    api.NewClient(),
+		spinner:      s,
+		toastVisible: false,
+		showHelp:     false,
+		selectedTab:  0,
 	}
 }
 
