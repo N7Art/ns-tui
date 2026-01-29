@@ -21,7 +21,7 @@
 
             # vendorHash needs to be updated after go.mod changes
             # Set to null first, then nix will tell you the correct hash
-            vendorHash = "sha256-O4kTQWV2d1xxT4aBaRagUna+ığYh6XiуGJEbWdtJZvk=";
+            vendorHash = "sha256-tfBIDhUQbNM+rPQcyESyudniifts+8FjIsck1GLVvVA=";
 
             # Exclude vendor directory
             proxyVendor = true;
