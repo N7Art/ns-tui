@@ -419,11 +419,11 @@ func (m Model) handleHMDetailModeKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		if len(m.hmDetailHistory) > 0 {
 			last := m.hmDetailHistory[len(m.hmDetailHistory)-1]
 			m.hmDetailHistory = m.hmDetailHistory[:len(m.hmDetailHistory)-1]
-			opt := last.option
+			opt := last.Option
 			m.selectedHMOption = &opt
-			m.hmRelatedOptions = last.related
-			m.hmRelatedCursor = last.cursor
-			m.hmRelatedScrollOffset = last.scrollOffset
+			m.hmRelatedOptions = last.Related
+			m.hmRelatedCursor = last.Cursor
+			m.hmRelatedScrollOffset = last.ScrollOffset
 		} else {
 			// Stack empty — return to search results
 			m.mode = models.NormalMode
@@ -461,11 +461,11 @@ func (m Model) handleHMDetailModeKeys(msg tea.KeyMsg) (tea.Model, tea.Cmd) {
 		// Drill into the selected related option
 		if len(m.hmRelatedOptions) > 0 {
 			// Push current state onto history stack
-			m.hmDetailHistory = append(m.hmDetailHistory, hmDetailEntry{
-				option:       *m.selectedHMOption,
-				related:      m.hmRelatedOptions,
-				cursor:       m.hmRelatedCursor,
-				scrollOffset: m.hmRelatedScrollOffset,
+			m.hmDetailHistory = append(m.hmDetailHistory, models.HmDetailEntry{
+				Option:       *m.selectedHMOption,
+				Related:      m.hmRelatedOptions,
+				Cursor:       m.hmRelatedCursor,
+				ScrollOffset: m.hmRelatedScrollOffset,
 			})
 			// Navigate to the selected related option
 			selected := m.hmRelatedOptions[m.hmRelatedCursor]

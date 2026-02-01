@@ -1,5 +1,13 @@
 package models
 
+// HmDetailEntry stores one level of the HM detail navigation stack
+type HmDetailEntry struct {
+	Option       HMOption
+	Related      []HMOption
+	Cursor       int
+	ScrollOffset int
+}
+
 // HMOption represents a single Home Manager configuration option
 type HMOption struct {
 	Name         string          // Dotted option path, e.g. "programs.git.enable"

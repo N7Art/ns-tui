@@ -7,21 +7,10 @@ import (
 	"github.com/briheet/ns-tui/internal/hm"
 	"github.com/briheet/ns-tui/internal/models"
 
-	"github.com/briheet/ns-tui/internal/styles"
-
 	"github.com/charmbracelet/bubbles/spinner"
 	"github.com/charmbracelet/bubbles/textinput"
 	tea "github.com/charmbracelet/bubbletea"
-	"github.com/charmbracelet/lipgloss"
 )
-
-// hmDetailEntry stores one level of the HM detail navigation stack
-type hmDetailEntry struct {
-	option       models.HMOption
-	related      []models.HMOption
-	cursor       int
-	scrollOffset int
-}
 
 // Model represents the application state
 type Model struct {
@@ -57,37 +46,21 @@ type Model struct {
 	hmLastQuery       string            // Last HM search query
 	hmErr             error             // HM-specific error
 	// Home Manager detail state
-	selectedHMOption      *models.HMOption  // Currently viewed HM option
-	hmDetailHistory       []hmDetailEntry   // Navigation stack for back-traversal
-	hmRelatedOptions      []models.HMOption // Sibling options for current selection
-	hmRelatedCursor       int               // Cursor in related options list
-	hmRelatedScrollOffset int               // Scroll offset for related options
+	selectedHMOption      *models.HMOption       // Currently viewed HM option
+	hmDetailHistory       []models.HmDetailEntry // Navigation stack for back-traversal
+	hmRelatedOptions      []models.HMOption      // Sibling options for current selection
+	hmRelatedCursor       int                    // Cursor in related options list
+	hmRelatedScrollOffset int                    // Scroll offset for related options
 }
 
 // NewModel creates a new application model
 func NewModel() Model {
-	ti := textinput.New()
-	ti.Placeholder = "Search NixOS packages..."
-	ti.Focus()
-	ti.CharLimit = 156
-	ti.Width = 66
-
-	// Initialize spinner
-	s := spinner.New()
-	s.Spinner = spinner.Dot
-	s.Style = lipgloss.NewStyle().Foreground(styles.ColorPink)
-
 	return Model{
-		textInput:    ti,
+		textInput:    models.NewTextInput(),
 		packages:     []models.Package{},
-		cursor:       0,
-		loading:      false,
 		mode:         models.InsertMode,
 		apiClient:    api.NewClient(),
-		spinner:      s,
-		toastVisible: false,
-		showHelp:     false,
-		selectedTab:  0,
+		spinner:      models.NewSpinner(),
 	}
 }
 
